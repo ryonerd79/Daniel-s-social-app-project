@@ -2,11 +2,11 @@ const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require('../models');
 
 module.exports = {
-    // Get all students
+    
     async getUsers(req, res) {
       try {
-        const users = await User.find();
-  
+        const users = await User.find().populate("thoughts").populate("friends")
+        
         
   
         res.json(users);
@@ -19,7 +19,7 @@ module.exports = {
 
 async getSingleUser(req, res) {
     try {
-      const user = await user.findOne({ _id: req.params.studentId })
+      const user = await User.findOne({ _id: req.params.userId })
         .select('-__v');
 
       if (!user) {
@@ -35,8 +35,9 @@ async getSingleUser(req, res) {
 
   async createUser(req, res) {
     try {
-      const User = await User.create(req.body);
-      res.json(User);
+      const user = await User.create(req.body);
+      console.log(user);
+      res.json(user);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -71,4 +72,43 @@ async getSingleUser(req, res) {
       res.status(500).json(err);
     }
   },
+
+  async addFriend(req, res) {
+     try{
+      const user = await User.findOneAndUpdate({
+        _id: req.params.userId,
+
+      }, {
+        $addToSet: {friends: req.params.friendId}
+      
+      }
+      , {
+        new: true
+      });
+      res.json(user)
+     } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+     }
+  },
+
+  async removeFriend(req, res) {
+    try{
+      const user = await User.findOneAndUpdate({
+        _id: req.params.userId,
+
+      }, {
+        $pull: {friends: req.params.friendId}
+      
+      }
+      , {
+        new: true
+      });
+      res.json(user)
+     } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+     }
+  }
 }
+

@@ -14,22 +14,23 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      validate: {
-        validator: () => Promise.resolve(false),
-        message: 'Email validation failed'
-      }
+      /*validate: {
+        let email = 'daniel36@gmail.com'
+        let pattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+        let result = email.match(pattern);
+      }*/
       
     },
     thoughts: [
         {
           type: Schema.Types.ObjectId,
-          ref: 'thought',
+          ref: 'Thought',
         },
       ],
     friends: [
         {
         type: Schema.Types.ObjectId,
-        ref: 'user',
+        ref: 'User',
         },
     ],
   },
@@ -43,6 +44,6 @@ const userSchema = new Schema(
 userSchema.virtual('friendCount').get(function(){
     return this.friends.length
 });
-const User = model('user', userSchema)
+const User = model('User', userSchema)
 
 module.exports = User
