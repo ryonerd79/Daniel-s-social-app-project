@@ -14,11 +14,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      /*validate: {
-        let email = 'daniel36@gmail.com'
-        let pattern = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
-        let result = email.match(pattern);
-      }*/
+      /*validate: [validateEmail, 'Please fill a email address'],
+      match: [/.+@.+\..+/, "Your email is incorrect, please try again"],*/
+      
       
     },
     thoughts: [
