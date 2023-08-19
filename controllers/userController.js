@@ -45,7 +45,7 @@ async getSingleUser(req, res) {
 
   async updateUser(req, res) {
     try {
-      const User = await User.findOneAndUpdate({ _id: req.params.userId });
+      const User = await User.findOneAndUpdate({ _id: req.params.username });
 
       if (!User) {
         return res.status(404).json({ message: 'No such User exists' });
