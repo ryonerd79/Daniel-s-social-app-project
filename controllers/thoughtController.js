@@ -81,4 +81,44 @@ module.exports = {
       res.status(500).json(err);
     }
   },
+  async addReaction(req, res) {
+    try{
+     const thought = await Thought.findOneAndUpdate({
+       _id: req.params.thoughtId,
+
+     }, {
+       $addToSet: {reactions: req.body,}
+     
+     }
+     , {
+       new: true,
+       runValidators: true,
+     });
+     res.json(thought)
+    } catch (err) {
+     console.log(err);
+     res.status(500).json(err);
+    }
+ },
+
+ async removeReaction(req, res) {
+  try{
+    const thought = await Thought.findOneAndUpdate({
+      _id: req.params.thoughtId,
+
+    }, {
+      $pull: {reactions: {reactionId: req.params.reactionId}}
+    
+    }
+    , {
+      new: true,
+      runValidators: true,
+    });
+    res.json(thought);
+   } catch (err) {
+    console.log(err);
+    res.status(500).json(err);
+   }
+}
 };
+
